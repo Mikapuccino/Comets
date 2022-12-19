@@ -39,10 +39,10 @@ class Comets:
 
         if pygame.key.get_pressed()[pygame.K_LEFT] == True:
             self.player.rotate(clockwise=False)
-#
-#        if pygame.key.get_pressed()[pygame.K_UP] == True:
-#            newPlayerY = newPlayerY - 0.2
-#
+
+        if pygame.key.get_pressed()[pygame.K_UP] == True:
+            self.player.accelerate()
+
 #        if pygame.key.get_pressed()[pygame.K_DOWN] == True:
 #            newPlayerY = newPlayerY + 0.2
 
@@ -83,10 +83,15 @@ class GameObject:
 class Player(GameObject):
 
     Rotation = 3
+    Acceleration = 0.25
 
     def __init__(self, pos):
         self.direction = Vector2(UP)
         super().__init__(pos, load_sprite("PlayerShip"), Vector2(0))
+
+    def accelerate(self):
+
+        self.velocity += self.direction * self.Acceleration
 
     def rotate(self, clockwise=True):
         
