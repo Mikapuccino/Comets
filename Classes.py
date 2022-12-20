@@ -14,10 +14,14 @@ class Comets:
         self.initPygame()
         self.screen = pygame.display.set_mode((800, 600))
         self.clock = pygame.time.Clock()
-        self.player = Player((400, 300))
-        self.asteroid = []
+        self.bullets = []
+        self.player = Player((400, 300), self.bullets.append)
+        self.asteroids = []
 
-        for i  in range(3):
+        self.cooldown = True
+        self.lastShot = 0
+
+        for i in range(3):
 
             while True:
                 pos = random_position(self.screen)
@@ -25,11 +29,16 @@ class Comets:
                 if (pos.distance_to(self.player.pos) > self.min_distance):
                     break
             
-            self.asteroid.append(Asteroid(pos))
+            self.asteroids.append(Asteroid(pos))
     
     def get_GameObject(self):
 
-        return [self.player, *self.asteroid]
+        gameObjects = [*self.bullets, *self.asteroids]
+
+        if self.player:
+            gameObjects.append(self.player)
+
+        return gameObjects
 
     def main(self):
 
@@ -47,9 +56,24 @@ class Comets:
     def inputLogic(self):
 
         events = pygame.event.get()
+
+        if self.cooldown == False:
+
+            timePassed = pygame.time.get_ticks()
+
+            if timePassed >= self.lastShot + 4000:
+
+                self.cooldown = True
+
         for evt in events:
             if (evt.type == pygame.QUIT):
                 quit()
+
+            if evt.type == pygame.KEYDOWN and evt.key == pygame.K_SPACE and self.cooldown == True:
+                self.player.shoot()
+                self.cooldown = False
+                self.lastShot = pygame.time.get_ticks()
+
 
         if pygame.key.get_pressed()[pygame.K_RIGHT] == True:
             self.player.rotate(clockwise=True)
@@ -60,16 +84,35 @@ class Comets:
         if pygame.key.get_pressed()[pygame.K_UP] == True:
             self.player.accelerate()
 
+#        print(self.bullets)
+
     def gameLogic(self):
 
         for gameObject in self.get_GameObject():
-            gameObject.move(self.screen)
+            
+                gameObject.move(self.screen)
 
         if self.player:
-            for asteroid in self.asteroid:
+            for asteroid in self.asteroids:
                 if asteroid.collision(self.player):
                     self.player = None
                     break
+
+        for bullet in self.bullets[:]:
+            for asteroid in self.asteroids:
+                if asteroid.collision(bullet):
+                    self.asteroids.remove(asteroid)
+                    self.bullets.remove(bullet)
+                    break
+        
+#        for bullet in self.bullets[:]:
+#            timePassed = pygame.time.get_ticks()
+#            bulletTime = bullet.timeShot
+#            if timePassed >= bulletTime + 4000:
+#                self.bullets.remove(bullet)
+#                break
+
+
         
     def draw(self):
 
@@ -106,8 +149,10 @@ class Player(GameObject):
 
     Rotation = 3
     Acceleration = 0.25
+    BulletSpeed = 5
 
-    def __init__(self, pos):
+    def __init__(self, pos, create_bullet_callback):
+        self.create_bullet_callback = create_bullet_callback
         self.direction = Vector2(UP)
         super().__init__(pos, load_sprite("PlayerShip"), Vector2(0))
 
@@ -136,8 +181,25 @@ class Player(GameObject):
         blitPos = self.pos - rotatedSurfaceSize * 0.5
         surface.blit(rotatedSurface, blitPos)
 
+    def shoot(self):
+
+        bulletVelocity = self.direction * self.BulletSpeed + self.velocity
+        timeShot = pygame.time.get_ticks
+        bullet = Bullet(self.pos, bulletVelocity, timeShot)
+        self.create_bullet_callback(bullet)
+
 class Asteroid(GameObject):
 
     def __init__(self, pos):
         self.direction = Vector2(UP)
         super().__init__(pos, load_sprite("PlayerShip"), random_velocity(1, 5))
+
+class Bullet(GameObject):
+    def __init__(self, pos, velocity, timeShot):
+        super().__init__(pos, load_sprite("PlayerShip"), velocity)
+
+        def move():
+
+            self.pos = self.pos + self.velocity
+
+        self.timeShot = timeShot
