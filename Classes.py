@@ -7,13 +7,30 @@ UP = Vector2(0, -1)
 
 class Comets:
 
+    min_distance = 150
+
     def __init__(self):
 
         self.initPygame()
         self.screen = pygame.display.set_mode((800, 600))
         self.clock = pygame.time.Clock()
         self.player = Player((400, 300))
+        self.asteroid = []
+
+        for i  in range(3):
+
+            while True:
+                pos = random_position(self.screen)
+
+                if (pos.distance_to(self.player.pos) > self.min_distance):
+                    break
+            
+            self.asteroid.append(Asteroid(pos))
     
+    def get_GameObject(self):
+
+        return [self.player, *self.asteroid]
+
     def main(self):
 
         while True:
@@ -43,17 +60,22 @@ class Comets:
         if pygame.key.get_pressed()[pygame.K_UP] == True:
             self.player.accelerate()
 
-#        if pygame.key.get_pressed()[pygame.K_DOWN] == True:
-#            newPlayerY = newPlayerY + 0.2
-
     def gameLogic(self):
 
-        self.player.move(self.screen)
+        for gameObject in self.get_GameObject():
+            gameObject.move(self.screen)
+
+        if self.player:
+            for asteroid in self.asteroid:
+                if asteroid.collision(self.player):
+                    self.player = None
+                    break
         
     def draw(self):
 
         self.screen.fill((0, 0, 20))
-        self.player.draw(self.screen)
+        for gameObject in self.get_GameObject():
+            gameObject.draw(self.screen)
         pygame.display.flip()
         self.clock.tick(60)
 
@@ -113,3 +135,9 @@ class Player(GameObject):
         rotatedSurfaceSize = Vector2(rotatedSurface.get_size())
         blitPos = self.pos - rotatedSurfaceSize * 0.5
         surface.blit(rotatedSurface, blitPos)
+
+class Asteroid(GameObject):
+
+    def __init__(self, pos):
+        self.direction = Vector2(UP)
+        super().__init__(pos, load_sprite("PlayerShip"), random_velocity(1, 5))
