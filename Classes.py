@@ -84,10 +84,10 @@ class Comets:
         if pygame.key.get_pressed()[pygame.K_UP] == True:
             self.player.accelerate()
 
-#        print(self.bullets)
+        print(self.bullets)
 
     def gameLogic(self):
-
+        
         for gameObject in self.get_GameObject():
             
                 gameObject.move(self.screen)
@@ -105,12 +105,12 @@ class Comets:
                     self.bullets.remove(bullet)
                     break
         
-#        for bullet in self.bullets[:]:
-#            timePassed = pygame.time.get_ticks()
-#            bulletTime = bullet.timeShot
-#            if timePassed >= bulletTime + 4000:
-#                self.bullets.remove(bullet)
-#                break
+        for bullet in self.bullets[:]:
+            timePassed = pygame.time.get_ticks()
+            bulletTime = bullet.timeShot
+            if timePassed >= bulletTime + 4000:
+                self.bullets.remove(bullet)
+                break
 
 
         
@@ -184,7 +184,7 @@ class Player(GameObject):
     def shoot(self):
 
         bulletVelocity = self.direction * self.BulletSpeed + self.velocity
-        timeShot = pygame.time.get_ticks
+        timeShot = pygame.time.get_ticks()
         bullet = Bullet(self.pos, bulletVelocity, timeShot)
         self.create_bullet_callback(bullet)
 
@@ -198,7 +198,7 @@ class Bullet(GameObject):
     def __init__(self, pos, velocity, timeShot):
         super().__init__(pos, load_sprite("PlayerShip"), velocity)
 
-        def move():
+        def move(self):
 
             self.pos = self.pos + self.velocity
 
