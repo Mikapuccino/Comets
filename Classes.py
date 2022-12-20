@@ -48,8 +48,8 @@ class Comets:
 
     def gameLogic(self):
 
-        self.player.move()
-
+        self.player.move(self.screen)
+        
     def draw(self):
 
         self.screen.fill((0, 0, 20))
@@ -71,9 +71,9 @@ class GameObject:
         blitPos = self.pos - Vector2(self.radius)
         surface.blit(self.sprite, blitPos)
 
-    def move(self):
+    def move(self, surface):
 
-        self.pos = self.pos + self.velocity
+        self.pos = wrap_position((self.pos + self.velocity), surface)
 
     def collision(self, otherObj):
 
