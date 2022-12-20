@@ -192,7 +192,7 @@ class Asteroid(GameObject):
 
     def __init__(self, pos):
         self.direction = Vector2(UP)
-        super().__init__(pos, load_sprite("PlayerShip"), random_velocity(1, 5))
+        super().__init__(pos, load_sprite("Asteroid"), random_velocity(1, 5))
 
 class Bullet(GameObject):
     def __init__(self, pos, velocity, timeShot):
