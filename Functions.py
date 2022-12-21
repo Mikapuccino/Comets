@@ -44,11 +44,11 @@ def text(surface, text, font, color=Color("tomato")):
 
     surface.blit(textSurface, rect)
 
-def text_line(surface, text, font, pos, color=Color("tomato")):
+def text_in_line(surface, text, font, pos, color=Color("tomato")):
 
-    textSurface = font.render(text, True, color)
+    checkText = text.strip()
+    textSurface = font.render(checkText, True, color)
     rect = textSurface.get_rect()
-    rect.center = Vector2(surface.get_size()) / 2
-    rect.top = pos
+    rect.center = Vector2(400, pos)
 
     surface.blit(textSurface, rect)

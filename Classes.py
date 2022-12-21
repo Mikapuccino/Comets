@@ -24,7 +24,9 @@ class Comets:
         self.lastShot = 0
         self.died = False
         self.diedTime = 0
-        self.lines = 0
+        self.writing = True
+        self.show = True
+        self.timeLeaderboard = 0
 
         for i in range(3):
 
@@ -139,45 +141,50 @@ class Comets:
             self.died = True
 
         timePassed = pygame.time.get_ticks()
+        
+        ending = False
 
         text(self.screen, self.phrase, self.font)
 
         if timePassed >= self.diedTime + 4000:
 
+            count = 0
+
             self.screen.fill((0, 0, 20))
             
             leaderboard = open("Leaderboard.txt", "r")
 
-            self.lines = len(leaderboard.readlines())
+            text_in_line(self.screen, leaderboard.readline(), self.font, 40)
+            text_in_line(self.screen, leaderboard.readline(), self.font, 80)
+            text_in_line(self.screen, leaderboard.readline(), self.font, 120)
+            text_in_line(self.screen, leaderboard.readline(), self.font, 160)
+            text_in_line(self.screen, leaderboard.readline(), self.font, 200)
+            text_in_line(self.screen, leaderboard.readline(), self.font, 240)
+            text_in_line(self.screen, leaderboard.readline(), self.font, 280)
+            text_in_line(self.screen, leaderboard.readline(), self.font, 320)
+            text_in_line(self.screen, leaderboard.readline(), self.font, 360)
+            text_in_line(self.screen, leaderboard.readline(), self.font, 400)
+            text_in_line(self.screen, leaderboard.readline(), self.font, 440)
+            text_in_line(self.screen, leaderboard.readline(), self.font, 480)
+            
+            while ending == False:
+                
+                ending = self.showLeaderboard(ending)
 
-            #text(self.screen, leaderboard.readline(), self.font)
+    def showLeaderboard(self, ended):
 
-            for x in leaderboard:
-                for y in range(self.lines):
-                    if y == 1:
-                        text_line(self.screen, x, self.font, y * 20)
-                        print(x)
-                    if y == 2:
-                        text_line(self.screen, x, self.font, y * 40)
-                        print(x)
-                    if y == 3:
-                        text_line(self.screen, x, self.font, y * 60)
-                        print(x)
-                    if y == 4:
-                        text_line(self.screen, x, self.font, y * 80)
-                        print(x)
-                    if y == 5:
-                        text_line(self.screen, x, self.font, y * 100)
-                        print(x)
-                    if y == 6:
-                        text_line(self.screen, x, self.font, y * 120)
-                        print(x)
-                    if y == 7:
-                        text_line(self.screen, x, self.font, y * 140)
-                        print(x)
-                    if y == 8:
-                        text_line(self.screen, x, self.font, y * 160)
-                        print(x)
+        timePassed = pygame.time.get_ticks()
+        
+        if self.show == True:
+            
+            self.timeLeaderboard = pygame.time.get_ticks()
+            self.show = False
+            
+        if timePassed >= self.timeLeaderboard + 6000:
+
+            self.phrase = ""
+            ended = True
+            return(ended)
 
 class GameObject:
 
