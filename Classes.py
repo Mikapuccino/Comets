@@ -29,7 +29,7 @@ class Comets:
                 if (pos.distance_to(self.player.pos) > self.min_distance):
                     break
             
-            self.asteroids.append(Asteroid(pos))
+            self.asteroids.append(Asteroid(pos, self.asteroids.append))
     
     def get_GameObject(self):
 
@@ -74,7 +74,6 @@ class Comets:
                 self.cooldown = False
                 self.lastShot = pygame.time.get_ticks()
 
-
         if pygame.key.get_pressed()[pygame.K_RIGHT] == True:
             self.player.rotate(clockwise=True)
 
@@ -83,8 +82,6 @@ class Comets:
 
         if pygame.key.get_pressed()[pygame.K_UP] == True:
             self.player.accelerate()
-
-        print(self.bullets)
 
     def gameLogic(self):
         
@@ -103,6 +100,7 @@ class Comets:
                 if asteroid.collision(bullet):
                     self.asteroids.remove(asteroid)
                     self.bullets.remove(bullet)
+                    asteroid.split()
                     break
         
         for bullet in self.bullets[:]:
@@ -190,9 +188,24 @@ class Player(GameObject):
 
 class Asteroid(GameObject):
 
-    def __init__(self, pos):
-        self.direction = Vector2(UP)
-        super().__init__(pos, load_sprite("Asteroid"), random_velocity(1, 5))
+    def __init__(self, pos, asteroid_callback, size=3):
+        self.asteroid_callback = asteroid_callback
+        self.size = size
+        size_scale = { 3:1, 2:0.5, 1:0.25 }
+        scale = size_scale[size]
+        sprite = rotozoom(load_sprite("Asteroid"), 0, scale)
+        super().__init__(pos, sprite, random_velocity(1, 5))
+    
+    def split(self):
+        if self.size > 1:
+            if self.size == 3:
+                for i in range (3):
+                    asteroid = Asteroid(self.pos, self.asteroid_callback, self.size - 1)
+                    self.asteroid_callback(asteroid)
+            if self.size == 2:
+                for i in range (5):
+                    asteroid = Asteroid(self.pos, self.asteroid_callback, self.size - 1)
+                    self.asteroid_callback(asteroid)
 
 class Bullet(GameObject):
     def __init__(self, pos, velocity, timeShot):
