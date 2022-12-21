@@ -24,6 +24,7 @@ class Comets:
         self.lastShot = 0
         self.died = False
         self.diedTime = 0
+        self.score = 0
         self.writing = True
         self.show = True
         self.timeLeaderboard = 0
@@ -109,6 +110,7 @@ class Comets:
                     self.asteroids.remove(asteroid)
                     self.bullets.remove(bullet)
                     asteroid.split()
+                    self.score = self.score + 100
                     break
         
         for bullet in self.bullets[:]:
@@ -117,8 +119,6 @@ class Comets:
             if timePassed >= bulletTime + 4000:
                 self.bullets.remove(bullet)
                 break
-
-
         
     def draw(self):
 
@@ -154,6 +154,74 @@ class Comets:
             
             leaderboard = open("Leaderboard.txt", "r")
 
+            skip = 2
+            for i in range(skip):
+                leaderboard.readline()
+            score1 = leaderboard.readline()
+            score1 = score1.split(" ")
+            score2 = leaderboard.readline()
+            score2 = score2.split(" ")
+            score3 = leaderboard.readline()
+            score3 = score3.split(" ")
+            score4 = leaderboard.readline()
+            score4 = score4.split(" ")
+            score5 = leaderboard.readline()
+            score5 = score5.split(" ")
+            score6 = leaderboard.readline()
+            score6 = score6.split(" ")
+            score7 = leaderboard.readline()
+            score7 = score7.split(" ")
+            score8 = leaderboard.readline()
+            score8 = score8.split(" ")
+            score9 = leaderboard.readline()
+            score9 = score9.split(" ")
+            score10 = leaderboard.readline()
+            score10 = score10.split(" ")
+
+            leaderboard.close()
+
+            if self.score > int(score1[1]):
+                self.editLeaderboard(3)
+                self.score = 0
+            
+            if self.score > int(score2[1]):
+                self.editLeaderboard(4)
+                self.score = 0
+            
+            if self.score > int(score3[1]):
+                self.editLeaderboard(5)
+                self.score = 0
+            
+            if self.score > int(score4[1]):
+                self.editLeaderboard(6)
+                self.score = 0
+            
+            if self.score > int(score5[1]):
+                self.editLeaderboard(7)
+                self.score = 0
+            
+            if self.score > int(score6[1]):
+                self.editLeaderboard(8)
+                self.score = 0
+            
+            if self.score > int(score7[1]):
+                self.editLeaderboard(9)
+                self.score = 0
+            
+            if self.score > int(score8[1]):
+                self.editLeaderboard(10)
+                self.score = 0
+
+            if self.score > int(score9[1]):
+                self.editLeaderboard(11)
+                self.score = 0
+
+            if self.score > int(score10[1]):
+                self.editLeaderboard(12)
+                self.score = 0
+
+            leaderboard = open("Leaderboard.txt", "r")
+
             text_in_line(self.screen, leaderboard.readline(), self.font, 40)
             text_in_line(self.screen, leaderboard.readline(), self.font, 80)
             text_in_line(self.screen, leaderboard.readline(), self.font, 120)
@@ -166,11 +234,24 @@ class Comets:
             text_in_line(self.screen, leaderboard.readline(), self.font, 400)
             text_in_line(self.screen, leaderboard.readline(), self.font, 440)
             text_in_line(self.screen, leaderboard.readline(), self.font, 480)
+
+            leaderboard.close()
             
             while ending == False:
                 
                 ending = self.showLeaderboard(ending)
 
+    def editLeaderboard(self, lineEdit):
+
+        playerName = input("Input your name: ")
+        leaderboard = open("Leaderboard.txt", "r")
+        contents = leaderboard.readlines()
+        contents[lineEdit - 1] = playerName[:3] + ": " + str(self.score) + "\n"
+        leaderboard.close()
+        leaderboard = open("Leaderboard.txt", "w")
+        leaderboard.writelines(contents)
+        leaderboard.close()
+    
     def showLeaderboard(self, ended):
 
         timePassed = pygame.time.get_ticks()
