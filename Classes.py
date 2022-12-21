@@ -28,6 +28,7 @@ class Comets:
         self.writing = True
         self.show = True
         self.timeLeaderboard = 0
+        self.end = False
 
         for i in range(3):
 
@@ -50,7 +51,7 @@ class Comets:
 
     def main(self):
 
-        while True:
+        while self.end == False:
 
             self.inputLogic()
             self.gameLogic()
@@ -240,6 +241,10 @@ class Comets:
             while ending == False:
                 
                 ending = self.showLeaderboard(ending)
+
+            if ending == True:
+            
+                self.end = True
 
     def editLeaderboard(self, lineEdit):
 
