@@ -14,12 +14,17 @@ class Comets:
         self.initPygame()
         self.screen = pygame.display.set_mode((800, 600))
         self.clock = pygame.time.Clock()
+        self.font = pygame.font.Font(None, 64)
+        self.phrase = ""
         self.bullets = []
         self.player = Player((400, 300), self.bullets.append)
         self.asteroids = []
 
         self.cooldown = True
         self.lastShot = 0
+        self.died = False
+        self.diedTime = 0
+        self.lines = 0
 
         for i in range(3):
 
@@ -93,6 +98,7 @@ class Comets:
             for asteroid in self.asteroids:
                 if asteroid.collision(self.player):
                     self.player = None
+                    self.phrase = "GAME OVER"
                     break
 
         for bullet in self.bullets[:]:
@@ -115,10 +121,63 @@ class Comets:
     def draw(self):
 
         self.screen.fill((0, 0, 20))
+        
         for gameObject in self.get_GameObject():
             gameObject.draw(self.screen)
+        
+        if self.phrase == "GAME OVER":
+            self.gameOver()
+        
         pygame.display.flip()
         self.clock.tick(60)
+
+    def gameOver(self):
+        self.screen.fill((0, 0, 20))
+
+        if self.died == False:
+            self.diedTime = pygame.time.get_ticks()
+            self.died = True
+
+        timePassed = pygame.time.get_ticks()
+
+        text(self.screen, self.phrase, self.font)
+
+        if timePassed >= self.diedTime + 4000:
+
+            self.screen.fill((0, 0, 20))
+            
+            leaderboard = open("Leaderboard.txt", "r")
+
+            self.lines = len(leaderboard.readlines())
+
+            #text(self.screen, leaderboard.readline(), self.font)
+
+            for x in leaderboard:
+                for y in range(self.lines):
+                    if y == 1:
+                        text_line(self.screen, x, self.font, y * 20)
+                        print(x)
+                    if y == 2:
+                        text_line(self.screen, x, self.font, y * 40)
+                        print(x)
+                    if y == 3:
+                        text_line(self.screen, x, self.font, y * 60)
+                        print(x)
+                    if y == 4:
+                        text_line(self.screen, x, self.font, y * 80)
+                        print(x)
+                    if y == 5:
+                        text_line(self.screen, x, self.font, y * 100)
+                        print(x)
+                    if y == 6:
+                        text_line(self.screen, x, self.font, y * 120)
+                        print(x)
+                    if y == 7:
+                        text_line(self.screen, x, self.font, y * 140)
+                        print(x)
+                    if y == 8:
+                        text_line(self.screen, x, self.font, y * 160)
+                        print(x)
 
 class GameObject:
 
@@ -209,7 +268,7 @@ class Asteroid(GameObject):
 
 class Bullet(GameObject):
     def __init__(self, pos, velocity, timeShot):
-        super().__init__(pos, load_sprite("PlayerShip"), velocity)
+        super().__init__(pos, load_sprite("Bullet"), velocity)
 
         def move(self):
 

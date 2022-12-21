@@ -1,5 +1,7 @@
+import pygame
 from pygame.image import load
 from pygame.math import Vector2
+from pygame import Color
 import random
 
 def load_sprite(name, withAlpha = True):
@@ -34,6 +36,19 @@ def random_velocity(min_velocity, max_velocity):
 
     return Vector2(speed, 0).rotate(angle)
 
+def text(surface, text, font, color=Color("tomato")):
 
-    
+    textSurface = font.render(text, True, color)
+    rect = textSurface.get_rect()
+    rect.center = Vector2(surface.get_size()) / 2
 
+    surface.blit(textSurface, rect)
+
+def text_line(surface, text, font, pos, color=Color("tomato")):
+
+    textSurface = font.render(text, True, color)
+    rect = textSurface.get_rect()
+    rect.center = Vector2(surface.get_size()) / 2
+    rect.top = pos
+
+    surface.blit(textSurface, rect)
