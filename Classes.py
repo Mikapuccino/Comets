@@ -113,6 +113,7 @@ class Comets:
             if self.up_pressed == True:
                 self.start = True
                 self.end = False
+                self.restart()
 
         pygame.display.flip()
         self.clock.tick(60)
@@ -342,6 +343,32 @@ class Comets:
             self.phrase = ""
             ended = True
             return(ended)
+
+    def restart(self):
+
+        self.phrase = ""
+        self.bullets = []
+        self.player = Player((400, 300), self.bullets.append)
+        self.asteroids = []
+
+        self.cooldown = True
+        self.lastShot = 0
+        self.died = False
+        self.diedTime = 0
+        self.score = 0
+        self.writing = True
+        self.show = True
+        self.timeLeaderboard = 0
+
+        for i in range(3):
+
+            while True:
+                pos = random_position(self.screen)
+
+                if (pos.distance_to(self.player.pos) > self.min_distance):
+                    break
+            
+            self.asteroids.append(Asteroid(pos, self.asteroids.append))
 
 class GameObject:
 
