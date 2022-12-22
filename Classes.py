@@ -20,6 +20,9 @@ class Comets:
         self.player = Player((400, 300), self.bullets.append)
         self.asteroids = []
 
+        self.start = False
+        self.up_pressed = False
+        self.down_pressed = False
         self.cooldown = True
         self.lastShot = 0
         self.died = False
@@ -28,7 +31,7 @@ class Comets:
         self.writing = True
         self.show = True
         self.timeLeaderboard = 0
-        self.end = False
+        self.end = True
 
         for i in range(3):
 
@@ -50,52 +53,69 @@ class Comets:
         return gameObjects
 
     def main(self):
-        
-        while self.end == False:
 
-            self.inputLogic()
-            self.gameLogic()
-            self.draw()
+        while True:
+
+            if self.end == True and self.start == False:
+
+                self.main_menu()
+        
+            if self.end == False and self.start == True:
+
+                self.inputLogic()
+                self.gameLogic()
+                self.draw()
 
     def initPygame(self):
 
         pygame.init()
-        pygame.display.set_caption("Comets")
 
     def main_menu(self):
 
-        events = pygame.event.get()
-
-        menu = True
-        start = False
-        up_pressed = False
-        down_pressed = False
+        self.start = False
 
         self.screen.fill((0, 0, 20))
         text_in_line(self.screen, "COMETS", self.font, 40, "white")
-        text_in_line(self.screen, "START", self.font, 60, "white")
-        text_in_line(self.screen, "EXIT", self.font, 80, "white")
+        text_in_line(self.screen, "START", self.font, 120, "white")
+        text_in_line(self.screen, "EXIT", self.font, 160, "white")
+
+        if self.up_pressed == True:
+
+            text_in_line(self.screen, "START", self.font, 120)
+
+        if self.down_pressed == True:
+
+            text_in_line(self.screen, "EXIT", self.font, 160)
+
+        events = pygame.event.get()
+
+        for evt in events:
+            if (evt.type == pygame.QUIT):
+                quit()
 
         if pygame.key.get_pressed()[pygame.K_UP] == True:
-            text_in_line(self.screen, "START", self.font, 60)
-            up_pressed = True
-            down_pressed = False
+            text_in_line(self.screen, "START", self.font, 120)
+            text_in_line(self.screen, "EXIT", self.font, 160, "white")
+            self.up_pressed = True
+            self.down_pressed = False
 
         if pygame.key.get_pressed()[pygame.K_DOWN] == True:
-            text_in_line(self.screen, "EXIT", self.font, 80)
-            down_pressed = True
-            up_pressed = False
-        
+            text_in_line(self.screen, "EXIT", self.font, 160)
+            text_in_line(self.screen, "START", self.font, 120, "white")
+            self.down_pressed = True
+            self.up_pressed = False
+
         if pygame.key.get_pressed()[pygame.K_SPACE] == True:
-            
-            if down_pressed == True:
+
+            if self.down_pressed == True:
                 quit()
-                
-            if up_pressed == True:
-                start = True
-                return start
-        
-        return start
+
+            if self.up_pressed == True:
+                self.start = True
+                self.end = False
+
+        pygame.display.flip()
+        self.clock.tick(60)
 
     def inputLogic(self):
 
@@ -113,19 +133,23 @@ class Comets:
             if (evt.type == pygame.QUIT):
                 quit()
 
-            if evt.type == pygame.KEYDOWN and evt.key == pygame.K_SPACE and self.cooldown == True:
-                self.player.shoot()
-                self.cooldown = False
-                self.lastShot = pygame.time.get_ticks()
+            if self.phrase != "GAME OVER":
 
-        if pygame.key.get_pressed()[pygame.K_RIGHT] == True:
-            self.player.rotate(clockwise=True)
+                if evt.type == pygame.KEYDOWN and evt.key == pygame.K_SPACE and self.cooldown == True:
+                    self.player.shoot()
+                    self.cooldown = False
+                    self.lastShot = pygame.time.get_ticks()
 
-        if pygame.key.get_pressed()[pygame.K_LEFT] == True:
-            self.player.rotate(clockwise=False)
+        if self.phrase != "GAME OVER":
 
-        if pygame.key.get_pressed()[pygame.K_UP] == True:
-            self.player.accelerate()
+            if pygame.key.get_pressed()[pygame.K_RIGHT] == True:
+                self.player.rotate(clockwise=True)
+    
+            if pygame.key.get_pressed()[pygame.K_LEFT] == True:
+                self.player.rotate(clockwise=False)
+    
+            if pygame.key.get_pressed()[pygame.K_UP] == True:
+                self.player.accelerate()
 
     def gameLogic(self):
         
@@ -180,11 +204,9 @@ class Comets:
         
         ending = False
 
-        text(self.screen, self.phrase, self.font)
+        text(self.screen, self.phrase, self.font, "white")
 
         if timePassed >= self.diedTime + 4000:
-
-            count = 0
 
             self.screen.fill((0, 0, 20))
             
@@ -258,18 +280,18 @@ class Comets:
 
             leaderboard = open("Leaderboard.txt", "r")
 
-            text_in_line(self.screen, leaderboard.readline(), self.font, 40)
-            text_in_line(self.screen, leaderboard.readline(), self.font, 80)
-            text_in_line(self.screen, leaderboard.readline(), self.font, 120)
-            text_in_line(self.screen, leaderboard.readline(), self.font, 160)
-            text_in_line(self.screen, leaderboard.readline(), self.font, 200)
-            text_in_line(self.screen, leaderboard.readline(), self.font, 240)
-            text_in_line(self.screen, leaderboard.readline(), self.font, 280)
-            text_in_line(self.screen, leaderboard.readline(), self.font, 320)
-            text_in_line(self.screen, leaderboard.readline(), self.font, 360)
-            text_in_line(self.screen, leaderboard.readline(), self.font, 400)
-            text_in_line(self.screen, leaderboard.readline(), self.font, 440)
-            text_in_line(self.screen, leaderboard.readline(), self.font, 480)
+            text_in_line(self.screen, leaderboard.readline(), self.font, 40, "white")
+            text_in_line(self.screen, leaderboard.readline(), self.font, 80, "white")
+            text_in_line(self.screen, leaderboard.readline(), self.font, 120, "white")
+            text_in_line(self.screen, leaderboard.readline(), self.font, 160, "white")
+            text_in_line(self.screen, leaderboard.readline(), self.font, 200, "white")
+            text_in_line(self.screen, leaderboard.readline(), self.font, 240, "white")
+            text_in_line(self.screen, leaderboard.readline(), self.font, 280, "white")
+            text_in_line(self.screen, leaderboard.readline(), self.font, 320, "white")
+            text_in_line(self.screen, leaderboard.readline(), self.font, 360, "white")
+            text_in_line(self.screen, leaderboard.readline(), self.font, 400, "white")
+            text_in_line(self.screen, leaderboard.readline(), self.font, 440, "white")
+            text_in_line(self.screen, leaderboard.readline(), self.font, 480, "white")
 
             leaderboard.close()
             
@@ -280,6 +302,7 @@ class Comets:
             if ending == True:
             
                 self.end = True
+                self.start = False
 
     def editLeaderboard(self, lineEdit):
 
