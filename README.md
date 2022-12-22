@@ -17,13 +17,19 @@ Project 2 by Daniela Gameiro nº 21901681 and Nelson Milheiro nº 21904365.
 
 * Nelson Milheiro
 
-  1. ...
+  1. Main Game logic (inputLogic and gameLogic functions)
+  2. GameObject class
+  3. Player class and logic
+  4. Bullet class and logic
+  5. Functions file
+  6. Game Over and Leaderboard screens
+  7. Leaderboard reading and writing logic
    
 ## Solution architecture
 
 The `Main.py` is where the function `Comets()` are called to start the game.
 
-`Classes.py` ➞ Is responsible for defining the `Comets` class: encompassing the game loop, player inputs, game logic and screens. Also, it has the `Player`, `Asteroid` and `Bullet` classes with the `GameObject` parameter, which has an essential function, the `collision`.
+`Classes.py` ➞ Is responsible for defining the `Comets` class: encompassing the game loop, player inputs, game logic and screens. Also, it has the `Player`, `Asteroid` and `Bullet` classes that inherit the `GameObject` class, which has an essential function for all game objects.
 
 `Functions.py` ➞ Is responsible for loading the sprites (images), the wrap-around logic (player, bullets and asteroids) and the `random_position`/`random_velocity` of the asteroids.
 
