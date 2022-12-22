@@ -306,9 +306,22 @@ class Comets:
 
     def editLeaderboard(self, lineEdit):
 
+        x = 0
+
         playerName = input("Input your name: ")
         leaderboard = open("Leaderboard.txt", "r")
         contents = leaderboard.readlines()
+        while (lineEdit + x) < len(contents):
+
+            bottomUp = len(contents) - x - 1
+
+            if x == 0:
+                contents[bottomUp] = contents[bottomUp - 1].strip()
+            if x > 0:
+                contents[bottomUp] = contents[bottomUp - 1]
+
+            x = x + 1
+
         contents[lineEdit - 1] = playerName[:3] + ": " + str(self.score) + "\n"
         leaderboard.close()
         leaderboard = open("Leaderboard.txt", "w")
@@ -420,9 +433,5 @@ class Asteroid(GameObject):
 class Bullet(GameObject):
     def __init__(self, pos, velocity, timeShot):
         super().__init__(pos, load_sprite("Bullet"), velocity)
-
-        def move(self):
-
-            self.pos = self.pos + self.velocity
 
         self.timeShot = timeShot
