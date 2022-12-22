@@ -76,16 +76,16 @@ class Comets:
 
         self.screen.fill((0, 0, 20))
         text_in_line(self.screen, "COMETS", self.font, 40, "white")
-        text_in_line(self.screen, "START", self.font, 120, "white")
-        text_in_line(self.screen, "EXIT", self.font, 160, "white")
+        text_in_line(self.screen, "START", self.font, 280, "white")
+        text_in_line(self.screen, "EXIT", self.font, 340, "white")
 
         if self.up_pressed == True:
 
-            text_in_line(self.screen, "START", self.font, 120)
+            text_in_line(self.screen, "START", self.font, 280)
 
         if self.down_pressed == True:
 
-            text_in_line(self.screen, "EXIT", self.font, 160)
+            text_in_line(self.screen, "EXIT", self.font, 340)
 
         events = pygame.event.get()
 
@@ -94,14 +94,14 @@ class Comets:
                 quit()
 
         if pygame.key.get_pressed()[pygame.K_UP] == True:
-            text_in_line(self.screen, "START", self.font, 120)
-            text_in_line(self.screen, "EXIT", self.font, 160, "white")
+            text_in_line(self.screen, "START", self.font, 280)
+            text_in_line(self.screen, "EXIT", self.font, 340, "white")
             self.up_pressed = True
             self.down_pressed = False
 
         if pygame.key.get_pressed()[pygame.K_DOWN] == True:
-            text_in_line(self.screen, "EXIT", self.font, 160)
-            text_in_line(self.screen, "START", self.font, 120, "white")
+            text_in_line(self.screen, "EXIT", self.font, 340)
+            text_in_line(self.screen, "START", self.font, 280, "white")
             self.down_pressed = True
             self.up_pressed = False
 
