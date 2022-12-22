@@ -5,4 +5,10 @@ from Classes import *
 # Where the function Comets() are called to start the game.
 
 comets = Comets()
-comets.main()
+start = False
+
+while start == False:
+    start = comets.main_menu()
+
+if start == True:
+    comets.main()

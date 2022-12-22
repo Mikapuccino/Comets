@@ -50,7 +50,7 @@ class Comets:
         return gameObjects
 
     def main(self):
-
+        
         while self.end == False:
 
             self.inputLogic()
@@ -61,6 +61,41 @@ class Comets:
 
         pygame.init()
         pygame.display.set_caption("Comets")
+
+    def main_menu(self):
+
+        events = pygame.event.get()
+
+        menu = True
+        start = False
+        up_pressed = False
+        down_pressed = False
+
+        self.screen.fill((0, 0, 20))
+        text_in_line(self.screen, "COMETS", self.font, 40, "white")
+        text_in_line(self.screen, "START", self.font, 60, "white")
+        text_in_line(self.screen, "EXIT", self.font, 80, "white")
+
+        if pygame.key.get_pressed()[pygame.K_UP] == True:
+            text_in_line(self.screen, "START", self.font, 60)
+            up_pressed = True
+            down_pressed = False
+
+        if pygame.key.get_pressed()[pygame.K_DOWN] == True:
+            text_in_line(self.screen, "EXIT", self.font, 80)
+            down_pressed = True
+            up_pressed = False
+        
+        if pygame.key.get_pressed()[pygame.K_SPACE] == True:
+            
+            if down_pressed == True:
+                quit()
+                
+            if up_pressed == True:
+                start = True
+                return start
+        
+        return start
 
     def inputLogic(self):
 
